@@ -1,52 +1,14 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"grpc-funnzy-dev/pbs"
 	"log"
 	"net"
-	"time"
+
+	"grpc-funnzy-dev/grpc/servers/caculator_server"
+	"grpc-funnzy-dev/pbs"
 
 	"google.golang.org/grpc"
 )
-
-type CaculatorServer struct {
-}
-
-func (caculatorServer *CaculatorServer) Hello(contex context.Context, HelloRequest *pbs.HelloRequest) (*pbs.HelloResponse, error) {
-	log.Println("CaculatorServer.Hello")
-	log.Println("HelloRequest")
-	log.Printf("\tMessage: %s\n", HelloRequest.GetMessage())
-
-	message := fmt.Sprintf("Hello from server at %s", time.Now().String())
-	helloResponse := &pbs.HelloResponse{
-		Message: message,
-	}
-	return helloResponse, nil
-}
-
-func (caculatorServer *CaculatorServer) Sum(context context.Context, sumRequest *pbs.SumRequest) (*pbs.SumResponse, error) {
-	log.Println("CaculatorServer.Sum")
-
-	num1 := sumRequest.Num1
-	num2 := sumRequest.Num2
-
-	log.Println("sumRequest")
-	log.Printf("\tNum1: %d\n", num1)
-	log.Printf("\tNum2: %d\n", num2)
-
-	sum := num1 + num2
-	sumResponse := &pbs.SumResponse{
-		Sum: sum,
-	}
-	return sumResponse, nil
-}
-
-func NewCaculatorService() *CaculatorServer {
-	service := CaculatorServer{}
-	return &service
-}
 
 func main() {
 	listener, err := net.Listen("tcp", "0.0.0.0:9000")
@@ -60,8 +22,7 @@ func main() {
 	grpcServer := grpc.NewServer()
 	log.Println("grpc.NewServer success")
 
-	caculatorServer := NewCaculatorService()
-	pbs.RegisterCaculatorServiceServer(grpcServer, caculatorServer)
+	pbs.RegisterCaculatorServiceServer(grpcServer, caculator_server.NewCaculatorServer())
 
 	log.Printf("start grpcServer.Serve on: %s\n", listener.Addr().String())
 	err = grpcServer.Serve(listener)
