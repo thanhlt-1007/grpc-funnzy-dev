@@ -21,5 +21,10 @@ func (caculatorServer *CaculatorServer) Sum(context context.Context, sumRequest 
 	sumResponse := &pbs.SumResponse{
 		Sum: sum,
 	}
+
+	log.Println("sumResponse")
+	log.Printf("\tSum: %d\n", sumResponse.GetSum())
+	log.Println("DONE\n")
+
 	return sumResponse, nil
 }
