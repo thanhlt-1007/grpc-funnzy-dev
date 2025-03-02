@@ -10,3 +10,17 @@
 gvm install go1.24.0
 gvm use go1.24.0
 ```
+
+## gofumpt
+
+- Install
+
+```sh
+go install mvdan.cc/gofumpt@v0.7.0
+```
+
+- Run
+
+```sh
+gofumpt -l -w .
+```
