@@ -1,0 +1,3 @@
+{
+    "go.goroot": "${env:HOME}/.gvm/gos/go1.24.0",
+}
