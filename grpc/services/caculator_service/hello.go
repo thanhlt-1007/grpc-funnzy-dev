@@ -9,8 +9,8 @@ import (
 	"grpc-funnzy-dev/pbs"
 )
 
-func (CaculatorService *CaculatorService) Hello(contex context.Context, helloRequest *pbs.HelloRequest) (*pbs.HelloResponse, error) {
-	log.Println("CaculatorService.Hello")
+func (caculatorService *CaculatorService) Hello(contex context.Context, helloRequest *pbs.HelloRequest) (*pbs.HelloResponse, error) {
+	log.Println("CaculatorService.Hello()")
 
 	message := helloRequest.GetMessage()
 

@@ -7,8 +7,8 @@ import (
 	"grpc-funnzy-dev/pbs"
 )
 
-func (CaculatorService *CaculatorService) Sum(context context.Context, sumRequest *pbs.SumRequest) (*pbs.SumResponse, error) {
-	log.Println("CaculatorService.Sum")
+func (caculatorService *CaculatorService) Sum(context context.Context, sumRequest *pbs.SumRequest) (*pbs.SumResponse, error) {
+	log.Println("CaculatorService.Sum()")
 
 	num1 := sumRequest.Num1
 	num2 := sumRequest.Num2
