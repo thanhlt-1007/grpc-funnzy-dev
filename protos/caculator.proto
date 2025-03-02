@@ -4,15 +4,11 @@ package protos;
 
 option go_package = "grpc-funnzy-dev/pbs";
 
-message Caculator {
+message HelloRequest {
   string message = 1;
 }
 
-message CaculatorRequest {
-  string message = 1;
-}
-
-message CaculatorResponse {
+message HelloResponse {
   string message = 1;
 }
 
@@ -26,6 +22,6 @@ message SumResponse {
 }
 
 service CaculatorService {
-  rpc Hello (CaculatorRequest) returns (CaculatorResponse) {}
+  rpc Hello (HelloRequest) returns (HelloResponse) {}
   rpc Sum (SumRequest) returns (SumResponse) {}
 }
