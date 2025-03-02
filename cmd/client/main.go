@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"grpc-funnzy-dev/pbs"
 	"log"
 	"time"
+
+	"grpc-funnzy-dev/pbs"
 
 	"google.golang.org/grpc"
 )
