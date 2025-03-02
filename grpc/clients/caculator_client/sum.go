@@ -22,6 +22,6 @@ func (caculatorClient *CaculatorClient) Sum() {
 		log.Fatalf("CaculatorClient.Sum() error: %v\n", err)
 	}
 	log.Println("sumResponse")
-	log.Printf("\tSum: %s\n", sumResponse.GetSum())
+	log.Printf("\tSum: %d\n", sumResponse.GetSum())
 	log.Println("DONE\n")
 }
