@@ -73,3 +73,9 @@ go get ./...
 ```sh
 make compile
 ```
+
+## run grpc server
+
+```sh
+make server
+```

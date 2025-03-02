@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package protos;
 
-option go_package = "grpc-funnzy-dev/pbs/caculator";
+option go_package = "grpc-funnzy-dev/pbs";
 
 message Caculator {
   string message = 1;

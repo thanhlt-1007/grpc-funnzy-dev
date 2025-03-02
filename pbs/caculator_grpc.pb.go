@@ -4,7 +4,7 @@
 // - protoc             v5.29.0
 // source: caculator.proto
 
-package caculator
+package pbs
 
 import (
 	context "context"
@@ -48,14 +48,13 @@ func (c *caculatorServiceClient) Hello(ctx context.Context, in *CaculatorRequest
 }
 
 // CaculatorServiceServer is the server API for CaculatorService service.
-// All implementations must embed UnimplementedCaculatorServiceServer
+// All implementations should embed UnimplementedCaculatorServiceServer
 // for forward compatibility.
 type CaculatorServiceServer interface {
 	Hello(context.Context, *CaculatorRequest) (*CaculatorResponse, error)
-	mustEmbedUnimplementedCaculatorServiceServer()
 }
 
-// UnimplementedCaculatorServiceServer must be embedded to have
+// UnimplementedCaculatorServiceServer should be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
@@ -65,8 +64,7 @@ type UnimplementedCaculatorServiceServer struct{}
 func (UnimplementedCaculatorServiceServer) Hello(context.Context, *CaculatorRequest) (*CaculatorResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Hello not implemented")
 }
-func (UnimplementedCaculatorServiceServer) mustEmbedUnimplementedCaculatorServiceServer() {}
-func (UnimplementedCaculatorServiceServer) testEmbeddedByValue()                          {}
+func (UnimplementedCaculatorServiceServer) testEmbeddedByValue() {}
 
 // UnsafeCaculatorServiceServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to CaculatorServiceServer will
