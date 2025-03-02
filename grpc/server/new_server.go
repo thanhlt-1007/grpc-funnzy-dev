@@ -13,8 +13,6 @@ func NewServer() *Server {
 		listener:   newListener(),
 		grpcServer: newGrpcServer(),
 	}
-	log.Println()
-
 	return &server
 }
 
@@ -27,7 +25,6 @@ func newListener() net.Listener {
 	log.Println("\tlistener")
 	log.Printf("\t\tAdd: %s", listener.Addr().String())
 	log.Printf("\t\tNetwork: %s", listener.Addr().Network())
-	log.Println()
 
 	return listener
 }
