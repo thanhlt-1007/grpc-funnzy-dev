@@ -65,3 +65,11 @@ protoc-gen-go-grpc --version # protoc-gen-go-grpc 1.5.1
 ```sh
 go get ./...
 ```
+
+## compile
+
+- Generate pbs package
+
+```sh
+make compile
+```

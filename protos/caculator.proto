@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package protos;
+
+option go_package = "grpc-funnzy-dev/pbs/caculator";
+
+message Caculator {
+  string message = 1;
+}
+
+message CaculatorRequest {
+  string message = 1;
+}
+
+message CaculatorResponse {
+  string message = 1;
+}
+
+service CaculatorService {
+  rpc Hello (CaculatorRequest) returns (CaculatorResponse) {}
+}
