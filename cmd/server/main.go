@@ -14,16 +14,16 @@ import (
 type CaculatorServer struct {
 }
 
-func (caculatorServer *CaculatorServer) Hello(contex context.Context, caculatorRequest *pbs.CaculatorRequest) (*pbs.CaculatorResponse, error) {
+func (caculatorServer *CaculatorServer) Hello(contex context.Context, HelloRequest *pbs.HelloRequest) (*pbs.HelloResponse, error) {
 	log.Println("CaculatorServer.Hello")
-	log.Println("caculatorRequest")
-	log.Printf("\tMessage: %s\n", caculatorRequest.GetMessage())
+	log.Println("HelloRequest")
+	log.Printf("\tMessage: %s\n", HelloRequest.GetMessage())
 
 	message := fmt.Sprintf("Hello from server at %s", time.Now().String())
-	caculatorResponse := &pbs.CaculatorResponse{
+	helloResponse := &pbs.HelloResponse{
 		Message: message,
 	}
-	return caculatorResponse, nil
+	return helloResponse, nil
 }
 
 func (caculatorServer *CaculatorServer) Sum(context context.Context, sumRequest *pbs.SumRequest) (*pbs.SumResponse, error) {

@@ -12,17 +12,17 @@ import (
 
 func clientHello(caculatorClient pbs.CaculatorServiceClient) {
 	message := fmt.Sprintf("Hello from client at %s", time.Now().String())
-	caculatorRequest := &pbs.CaculatorRequest{
+	helloRequest := &pbs.HelloRequest{
 		Message: message,
 	}
 
-	caculatorResponse, err := caculatorClient.Hello(context.Background(), caculatorRequest)
+	helloResponse, err := caculatorClient.Hello(context.Background(), helloRequest)
 	if err != nil {
 		log.Fatalf("caculatorClient.Hello error: %v\n", err)
 	}
 	log.Println("caculatorClient.Hello success")
-	log.Println("caculatorResponse")
-	log.Printf("\tMessage: %s\n", caculatorResponse.GetMessage())
+	log.Println("helloResponse")
+	log.Printf("\tMessage: %s\n", helloResponse.GetMessage())
 }
 
 func clientSum(caculatorClient pbs.CaculatorServiceClient) {
