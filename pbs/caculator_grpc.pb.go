@@ -23,6 +23,7 @@ const (
 	CaculatorService_Sum_FullMethodName           = "/protos.CaculatorService/Sum"
 	CaculatorService_ToPrimeNumber_FullMethodName = "/protos.CaculatorService/ToPrimeNumber"
 	CaculatorService_Average_FullMethodName       = "/protos.CaculatorService/Average"
+	CaculatorService_FindMax_FullMethodName       = "/protos.CaculatorService/FindMax"
 )
 
 // CaculatorServiceClient is the client API for CaculatorService service.
@@ -33,6 +34,7 @@ type CaculatorServiceClient interface {
 	Sum(ctx context.Context, in *SumRequest, opts ...grpc.CallOption) (*SumResponse, error)
 	ToPrimeNumber(ctx context.Context, in *ToPrimeNumberRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ToPrimeNumberResponse], error)
 	Average(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[AverageRequest, AverageResponse], error)
+	FindMax(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[FindMaxRequest, FindMaxResponse], error)
 }
 
 type caculatorServiceClient struct {
@@ -95,6 +97,19 @@ func (c *caculatorServiceClient) Average(ctx context.Context, opts ...grpc.CallO
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CaculatorService_AverageClient = grpc.ClientStreamingClient[AverageRequest, AverageResponse]
 
+func (c *caculatorServiceClient) FindMax(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[FindMaxRequest, FindMaxResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &CaculatorService_ServiceDesc.Streams[2], CaculatorService_FindMax_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[FindMaxRequest, FindMaxResponse]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CaculatorService_FindMaxClient = grpc.BidiStreamingClient[FindMaxRequest, FindMaxResponse]
+
 // CaculatorServiceServer is the server API for CaculatorService service.
 // All implementations should embed UnimplementedCaculatorServiceServer
 // for forward compatibility.
@@ -103,6 +118,7 @@ type CaculatorServiceServer interface {
 	Sum(context.Context, *SumRequest) (*SumResponse, error)
 	ToPrimeNumber(*ToPrimeNumberRequest, grpc.ServerStreamingServer[ToPrimeNumberResponse]) error
 	Average(grpc.ClientStreamingServer[AverageRequest, AverageResponse]) error
+	FindMax(grpc.BidiStreamingServer[FindMaxRequest, FindMaxResponse]) error
 }
 
 // UnimplementedCaculatorServiceServer should be embedded to have
@@ -123,6 +139,9 @@ func (UnimplementedCaculatorServiceServer) ToPrimeNumber(*ToPrimeNumberRequest, 
 }
 func (UnimplementedCaculatorServiceServer) Average(grpc.ClientStreamingServer[AverageRequest, AverageResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method Average not implemented")
+}
+func (UnimplementedCaculatorServiceServer) FindMax(grpc.BidiStreamingServer[FindMaxRequest, FindMaxResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method FindMax not implemented")
 }
 func (UnimplementedCaculatorServiceServer) testEmbeddedByValue() {}
 
@@ -198,6 +217,13 @@ func _CaculatorService_Average_Handler(srv interface{}, stream grpc.ServerStream
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CaculatorService_AverageServer = grpc.ClientStreamingServer[AverageRequest, AverageResponse]
 
+func _CaculatorService_FindMax_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CaculatorServiceServer).FindMax(&grpc.GenericServerStream[FindMaxRequest, FindMaxResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CaculatorService_FindMaxServer = grpc.BidiStreamingServer[FindMaxRequest, FindMaxResponse]
+
 // CaculatorService_ServiceDesc is the grpc.ServiceDesc for CaculatorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -223,6 +249,12 @@ var CaculatorService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "Average",
 			Handler:       _CaculatorService_Average_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "FindMax",
+			Handler:       _CaculatorService_FindMax_Handler,
+			ServerStreams: true,
 			ClientStreams: true,
 		},
 	},
