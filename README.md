@@ -24,3 +24,17 @@ go install mvdan.cc/gofumpt@v0.7.0
 ```sh
 gofumpt -l -w .
 ```
+
+## golangci-lint
+
+- Install
+
+```sh
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.63.4
+```
+
+- Run
+
+```sh
+golangci-lint run
+```
