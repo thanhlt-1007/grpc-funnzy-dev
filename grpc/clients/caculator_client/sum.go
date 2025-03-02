@@ -2,8 +2,9 @@ package caculator_client
 
 import (
 	"context"
-	"grpc-funnzy-dev/pbs"
 	"log"
+
+	"grpc-funnzy-dev/pbs"
 )
 
 func (caculatorClient *CaculatorClient) Sum() {
@@ -18,7 +19,7 @@ func (caculatorClient *CaculatorClient) Sum() {
 
 	sumResponse, err := caculatorClient.client.Sum(context.Background(), sumRequest)
 	if err != nil {
-		log.Fatalf("caculatorClient.Sum error: %v\n", err)
+		log.Fatalf("CaculatorClient.Sum() error: %v\n", err)
 	}
 	log.Println("sumResponse")
 	log.Printf("\tSum: %s\n", sumResponse.GetSum())

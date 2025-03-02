@@ -3,9 +3,10 @@ package caculator_client
 import (
 	"context"
 	"fmt"
-	"grpc-funnzy-dev/pbs"
 	"log"
 	"time"
+
+	"grpc-funnzy-dev/pbs"
 )
 
 func (caculatorClient *CaculatorClient) Hello() {
@@ -19,7 +20,7 @@ func (caculatorClient *CaculatorClient) Hello() {
 
 	helloResponse, err := caculatorClient.client.Hello(context.Background(), helloRequest)
 	if err != nil {
-		log.Fatalf("caculatorClient.Hello error: %v\n", err)
+		log.Fatalf("CaculatorClient.Hello error: %v\n", err)
 	}
 	log.Println("helloResponse")
 	log.Printf("\tMessage: %s\n", helloResponse.GetMessage())

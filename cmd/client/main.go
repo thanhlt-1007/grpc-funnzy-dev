@@ -1,10 +1,10 @@
 package main
 
 import (
-
-	"grpc-funnzy-dev/grpc/clients/caculator_client"
-	"google.golang.org/grpc"
 	"log"
+
+	"google.golang.org/grpc"
+	"grpc-funnzy-dev/grpc/clients/caculator_client"
 )
 
 func newGrpcClientConn() *grpc.ClientConn {
@@ -27,6 +27,7 @@ func main() {
 	grpc_caculator_client := caculator_client.NewCaculatorClient(grpcClientConn)
 	grpc_caculator_client.Hello()
 	grpc_caculator_client.Sum()
+	grpc_caculator_client.ToPirmeNumber()
 
 	defer grpcClientConn.Close()
 }

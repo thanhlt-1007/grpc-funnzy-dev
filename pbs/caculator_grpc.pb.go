@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CaculatorService_Hello_FullMethodName = "/protos.CaculatorService/Hello"
-	CaculatorService_Sum_FullMethodName   = "/protos.CaculatorService/Sum"
+	CaculatorService_Hello_FullMethodName         = "/protos.CaculatorService/Hello"
+	CaculatorService_Sum_FullMethodName           = "/protos.CaculatorService/Sum"
+	CaculatorService_ToPrimeNumber_FullMethodName = "/protos.CaculatorService/ToPrimeNumber"
 )
 
 // CaculatorServiceClient is the client API for CaculatorService service.
@@ -29,6 +30,7 @@ const (
 type CaculatorServiceClient interface {
 	Hello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloResponse, error)
 	Sum(ctx context.Context, in *SumRequest, opts ...grpc.CallOption) (*SumResponse, error)
+	ToPrimeNumber(ctx context.Context, in *ToPrimeNumberRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ToPrimeNumberResponse], error)
 }
 
 type caculatorServiceClient struct {
@@ -59,12 +61,32 @@ func (c *caculatorServiceClient) Sum(ctx context.Context, in *SumRequest, opts .
 	return out, nil
 }
 
+func (c *caculatorServiceClient) ToPrimeNumber(ctx context.Context, in *ToPrimeNumberRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ToPrimeNumberResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &CaculatorService_ServiceDesc.Streams[0], CaculatorService_ToPrimeNumber_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[ToPrimeNumberRequest, ToPrimeNumberResponse]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CaculatorService_ToPrimeNumberClient = grpc.ServerStreamingClient[ToPrimeNumberResponse]
+
 // CaculatorServiceServer is the server API for CaculatorService service.
 // All implementations should embed UnimplementedCaculatorServiceServer
 // for forward compatibility.
 type CaculatorServiceServer interface {
 	Hello(context.Context, *HelloRequest) (*HelloResponse, error)
 	Sum(context.Context, *SumRequest) (*SumResponse, error)
+	ToPrimeNumber(*ToPrimeNumberRequest, grpc.ServerStreamingServer[ToPrimeNumberResponse]) error
 }
 
 // UnimplementedCaculatorServiceServer should be embedded to have
@@ -79,6 +101,9 @@ func (UnimplementedCaculatorServiceServer) Hello(context.Context, *HelloRequest)
 }
 func (UnimplementedCaculatorServiceServer) Sum(context.Context, *SumRequest) (*SumResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Sum not implemented")
+}
+func (UnimplementedCaculatorServiceServer) ToPrimeNumber(*ToPrimeNumberRequest, grpc.ServerStreamingServer[ToPrimeNumberResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method ToPrimeNumber not implemented")
 }
 func (UnimplementedCaculatorServiceServer) testEmbeddedByValue() {}
 
@@ -136,6 +161,17 @@ func _CaculatorService_Sum_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CaculatorService_ToPrimeNumber_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ToPrimeNumberRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(CaculatorServiceServer).ToPrimeNumber(m, &grpc.GenericServerStream[ToPrimeNumberRequest, ToPrimeNumberResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CaculatorService_ToPrimeNumberServer = grpc.ServerStreamingServer[ToPrimeNumberResponse]
+
 // CaculatorService_ServiceDesc is the grpc.ServiceDesc for CaculatorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -152,6 +188,12 @@ var CaculatorService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _CaculatorService_Sum_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "ToPrimeNumber",
+			Handler:       _CaculatorService_ToPrimeNumber_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "caculator.proto",
 }

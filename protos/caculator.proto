@@ -21,7 +21,16 @@ message SumResponse {
   int32 sum = 1;
 }
 
+message ToPrimeNumberRequest {
+  int32 number = 1;
+}
+
+message ToPrimeNumberResponse {
+  int32 prime_number = 1;
+}
+
 service CaculatorService {
   rpc Hello (HelloRequest) returns (HelloResponse) {}
   rpc Sum (SumRequest) returns (SumResponse) {}
+  rpc ToPrimeNumber (ToPrimeNumberRequest) returns (stream ToPrimeNumberResponse) {}
 }
