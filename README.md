@@ -79,3 +79,9 @@ make compile
 ```sh
 make server
 ```
+
+## run grpc client
+
+```sh
+make client
+```
