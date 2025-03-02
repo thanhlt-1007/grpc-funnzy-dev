@@ -10,5 +10,4 @@ import (
 func (server *Server) RegisterServices() {
 	log.Println("Server.RegisterServices()")
 	pbs.RegisterCaculatorServiceServer(server.grpcServer, caculator_service.NewCaculatorService())
-	log.Println()
 }
