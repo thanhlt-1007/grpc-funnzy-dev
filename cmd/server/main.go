@@ -26,6 +26,23 @@ func (caculatorServer *CaculatorServer) Hello(contex context.Context, caculatorR
 	return caculatorResponse, nil
 }
 
+func (caculatorServer *CaculatorServer) Sum(context context.Context, sumRequest *pbs.SumRequest) (*pbs.SumResponse, error) {
+	log.Println("CaculatorServer.Sum")
+
+	num1 := sumRequest.Num1
+	num2 := sumRequest.Num2
+
+	log.Println("sumRequest")
+	log.Printf("\tNum1: %d\n", num1)
+	log.Printf("\tNum2: %d\n", num2)
+
+	sum := num1 + num2
+	sumResponse := &pbs.SumResponse{
+		Sum: sum,
+	}
+	return sumResponse, nil
+}
+
 func NewCaculatorService() *CaculatorServer {
 	service := CaculatorServer{}
 	return &service

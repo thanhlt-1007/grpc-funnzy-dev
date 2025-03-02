@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	CaculatorService_Hello_FullMethodName = "/protos.CaculatorService/Hello"
+	CaculatorService_Sum_FullMethodName   = "/protos.CaculatorService/Sum"
 )
 
 // CaculatorServiceClient is the client API for CaculatorService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CaculatorServiceClient interface {
 	Hello(ctx context.Context, in *CaculatorRequest, opts ...grpc.CallOption) (*CaculatorResponse, error)
+	Sum(ctx context.Context, in *SumRequest, opts ...grpc.CallOption) (*SumResponse, error)
 }
 
 type caculatorServiceClient struct {
@@ -47,11 +49,22 @@ func (c *caculatorServiceClient) Hello(ctx context.Context, in *CaculatorRequest
 	return out, nil
 }
 
+func (c *caculatorServiceClient) Sum(ctx context.Context, in *SumRequest, opts ...grpc.CallOption) (*SumResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SumResponse)
+	err := c.cc.Invoke(ctx, CaculatorService_Sum_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CaculatorServiceServer is the server API for CaculatorService service.
 // All implementations should embed UnimplementedCaculatorServiceServer
 // for forward compatibility.
 type CaculatorServiceServer interface {
 	Hello(context.Context, *CaculatorRequest) (*CaculatorResponse, error)
+	Sum(context.Context, *SumRequest) (*SumResponse, error)
 }
 
 // UnimplementedCaculatorServiceServer should be embedded to have
@@ -63,6 +76,9 @@ type UnimplementedCaculatorServiceServer struct{}
 
 func (UnimplementedCaculatorServiceServer) Hello(context.Context, *CaculatorRequest) (*CaculatorResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Hello not implemented")
+}
+func (UnimplementedCaculatorServiceServer) Sum(context.Context, *SumRequest) (*SumResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Sum not implemented")
 }
 func (UnimplementedCaculatorServiceServer) testEmbeddedByValue() {}
 
@@ -102,6 +118,24 @@ func _CaculatorService_Hello_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CaculatorService_Sum_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SumRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CaculatorServiceServer).Sum(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CaculatorService_Sum_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CaculatorServiceServer).Sum(ctx, req.(*SumRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CaculatorService_ServiceDesc is the grpc.ServiceDesc for CaculatorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -112,6 +146,10 @@ var CaculatorService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Hello",
 			Handler:    _CaculatorService_Hello_Handler,
+		},
+		{
+			MethodName: "Sum",
+			Handler:    _CaculatorService_Sum_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
