@@ -34,4 +34,17 @@ func main() {
 	log.Println("caculatorClient.Hello success")
 	log.Println("caculatorResponse")
 	log.Printf("\tMessage: %s\n", caculatorResponse.GetMessage())
+
+	sumRequest := &pbs.SumRequest{
+		Num1: 1,
+		Num2: 2,
+	}
+	sumResponse, err := caculatorClient.Sum(context.Background(), sumRequest)
+	if err != nil {
+		log.Fatalf("caculatorClient.Sum error: %v\n", err)
+	}
+	log.Println("caculatorClient.Sum success")
+	log.Println("sumResponse")
+	log.Printf("\tSum: %d\n", sumResponse.GetSum())
+
 }
