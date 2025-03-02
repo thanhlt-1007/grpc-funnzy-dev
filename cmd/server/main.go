@@ -4,7 +4,7 @@ import (
 	"log"
 	"net"
 
-	"grpc-funnzy-dev/grpc/servers/caculator_server"
+	"grpc-funnzy-dev/grpc/services/caculator_service"
 	"grpc-funnzy-dev/pbs"
 
 	"google.golang.org/grpc"
@@ -22,9 +22,9 @@ func main() {
 	grpcServer := grpc.NewServer()
 	log.Println("grpc.NewServer success")
 
-	pbs.RegisterCaculatorServiceServer(grpcServer, caculator_server.NewCaculatorServer())
+	pbs.RegisterCaculatorServiceServer(grpcServer, caculator_service.NewCaculatorService())
 
-	log.Printf("start grpcServer.Serve on: %s\n", listener.Addr().String())
+	log.Printf("start grpcServer.Serve on: %s\n\n", listener.Addr().String())
 	err = grpcServer.Serve(listener)
 	if err != nil {
 		log.Fatalf("grpcServer.Serve error: %v\n", err)
