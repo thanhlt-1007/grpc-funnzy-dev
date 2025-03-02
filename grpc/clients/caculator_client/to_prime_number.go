@@ -25,7 +25,7 @@ func (caculatorClient *CaculatorClient) ToPirmeNumber() {
 		toPrimeNumberResponse, err := stream.Recv()
 		if err != nil {
 			if err == io.EOF {
-				log.Println("EOF")
+				log.Println("EOF\n")
 				return
 			} else {
 				log.Fatalf("stream.Recv() error: %v\n", err)
@@ -35,6 +35,4 @@ func (caculatorClient *CaculatorClient) ToPirmeNumber() {
 		log.Println("toPrimeNumberResponse")
 		log.Printf("\tPrimeNumber: %d\n", toPrimeNumberResponse.GetPrimeNumber())
 	}
-
-	log.Println("DONE\n")
 }

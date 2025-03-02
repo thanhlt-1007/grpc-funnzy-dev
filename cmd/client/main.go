@@ -28,6 +28,7 @@ func main() {
 	grpc_caculator_client.Hello()
 	grpc_caculator_client.Sum()
 	grpc_caculator_client.ToPirmeNumber()
+	grpc_caculator_client.Average()
 
 	defer grpcClientConn.Close()
 }
