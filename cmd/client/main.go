@@ -32,6 +32,7 @@ func main() {
 	grpc_caculator_client.FindMax()
 	grpc_caculator_client.Square(111)
 	grpc_caculator_client.Square(-111)
+	grpc_caculator_client.SumWithDeadline()
 
 	defer grpcClientConn.Close()
 }
