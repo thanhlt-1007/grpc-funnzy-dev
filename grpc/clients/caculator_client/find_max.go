@@ -36,7 +36,7 @@ func (caculatorClient *CaculatorClient) FindMax() {
 			findMaxResponse, err := stream.Recv()
 			if err != nil {
 				if err == io.EOF {
-					log.Println("EOF")
+					log.Println("EOF\n")
 					break
 				}
 				log.Fatalf("stream.Recv() error: %v", err)
