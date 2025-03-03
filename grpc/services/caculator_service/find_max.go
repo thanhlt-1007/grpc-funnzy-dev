@@ -18,7 +18,7 @@ func (caculatorService *CaculatorService) FindMax(
 		findMaxRequest, err := stream.Recv()
 		if err != nil {
 			if err == io.EOF {
-				log.Println("EOF")
+				log.Println("EOF\n``")
 				return nil
 			}
 

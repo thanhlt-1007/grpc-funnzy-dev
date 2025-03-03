@@ -30,6 +30,8 @@ func main() {
 	grpc_caculator_client.ToPirmeNumber()
 	grpc_caculator_client.Average()
 	grpc_caculator_client.FindMax()
+	grpc_caculator_client.Square(111)
+	grpc_caculator_client.Square(-111)
 
 	defer grpcClientConn.Close()
 }

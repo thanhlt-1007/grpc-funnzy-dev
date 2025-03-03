@@ -45,11 +45,19 @@ message FindMaxResponse {
   int32 max = 1;
 }
 
+message SquareRequest {
+  int32 num = 1;
+}
+
+message SquareResponse {
+  double square = 1;
+}
+
 service CaculatorService {
   rpc Hello (HelloRequest) returns (HelloResponse) {}
   rpc Sum (SumRequest) returns (SumResponse) {}
   rpc ToPrimeNumber (ToPrimeNumberRequest) returns (stream ToPrimeNumberResponse) {}
-  rpc Average(stream AverageRequest) returns (AverageResponse) {}
+  rpc Average (stream AverageRequest) returns (AverageResponse) {}
   rpc FindMax(stream FindMaxRequest) returns (stream FindMaxResponse) {}
+  rpc Square (SquareRequest) returns (SquareResponse) {}
 }
-

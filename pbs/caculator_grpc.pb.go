@@ -24,6 +24,7 @@ const (
 	CaculatorService_ToPrimeNumber_FullMethodName = "/protos.CaculatorService/ToPrimeNumber"
 	CaculatorService_Average_FullMethodName       = "/protos.CaculatorService/Average"
 	CaculatorService_FindMax_FullMethodName       = "/protos.CaculatorService/FindMax"
+	CaculatorService_Square_FullMethodName        = "/protos.CaculatorService/Square"
 )
 
 // CaculatorServiceClient is the client API for CaculatorService service.
@@ -35,6 +36,7 @@ type CaculatorServiceClient interface {
 	ToPrimeNumber(ctx context.Context, in *ToPrimeNumberRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ToPrimeNumberResponse], error)
 	Average(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[AverageRequest, AverageResponse], error)
 	FindMax(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[FindMaxRequest, FindMaxResponse], error)
+	Square(ctx context.Context, in *SquareRequest, opts ...grpc.CallOption) (*SquareResponse, error)
 }
 
 type caculatorServiceClient struct {
@@ -110,6 +112,16 @@ func (c *caculatorServiceClient) FindMax(ctx context.Context, opts ...grpc.CallO
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CaculatorService_FindMaxClient = grpc.BidiStreamingClient[FindMaxRequest, FindMaxResponse]
 
+func (c *caculatorServiceClient) Square(ctx context.Context, in *SquareRequest, opts ...grpc.CallOption) (*SquareResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SquareResponse)
+	err := c.cc.Invoke(ctx, CaculatorService_Square_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CaculatorServiceServer is the server API for CaculatorService service.
 // All implementations should embed UnimplementedCaculatorServiceServer
 // for forward compatibility.
@@ -119,6 +131,7 @@ type CaculatorServiceServer interface {
 	ToPrimeNumber(*ToPrimeNumberRequest, grpc.ServerStreamingServer[ToPrimeNumberResponse]) error
 	Average(grpc.ClientStreamingServer[AverageRequest, AverageResponse]) error
 	FindMax(grpc.BidiStreamingServer[FindMaxRequest, FindMaxResponse]) error
+	Square(context.Context, *SquareRequest) (*SquareResponse, error)
 }
 
 // UnimplementedCaculatorServiceServer should be embedded to have
@@ -142,6 +155,9 @@ func (UnimplementedCaculatorServiceServer) Average(grpc.ClientStreamingServer[Av
 }
 func (UnimplementedCaculatorServiceServer) FindMax(grpc.BidiStreamingServer[FindMaxRequest, FindMaxResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method FindMax not implemented")
+}
+func (UnimplementedCaculatorServiceServer) Square(context.Context, *SquareRequest) (*SquareResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Square not implemented")
 }
 func (UnimplementedCaculatorServiceServer) testEmbeddedByValue() {}
 
@@ -224,6 +240,24 @@ func _CaculatorService_FindMax_Handler(srv interface{}, stream grpc.ServerStream
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CaculatorService_FindMaxServer = grpc.BidiStreamingServer[FindMaxRequest, FindMaxResponse]
 
+func _CaculatorService_Square_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SquareRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CaculatorServiceServer).Square(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CaculatorService_Square_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CaculatorServiceServer).Square(ctx, req.(*SquareRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CaculatorService_ServiceDesc is the grpc.ServiceDesc for CaculatorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -238,6 +272,10 @@ var CaculatorService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Sum",
 			Handler:    _CaculatorService_Sum_Handler,
+		},
+		{
+			MethodName: "Square",
+			Handler:    _CaculatorService_Square_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
