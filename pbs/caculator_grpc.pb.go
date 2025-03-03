@@ -19,12 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CaculatorService_Hello_FullMethodName         = "/protos.CaculatorService/Hello"
-	CaculatorService_Sum_FullMethodName           = "/protos.CaculatorService/Sum"
-	CaculatorService_ToPrimeNumber_FullMethodName = "/protos.CaculatorService/ToPrimeNumber"
-	CaculatorService_Average_FullMethodName       = "/protos.CaculatorService/Average"
-	CaculatorService_FindMax_FullMethodName       = "/protos.CaculatorService/FindMax"
-	CaculatorService_Square_FullMethodName        = "/protos.CaculatorService/Square"
+	CaculatorService_Hello_FullMethodName           = "/protos.CaculatorService/Hello"
+	CaculatorService_Sum_FullMethodName             = "/protos.CaculatorService/Sum"
+	CaculatorService_SumWithDeadline_FullMethodName = "/protos.CaculatorService/SumWithDeadline"
+	CaculatorService_ToPrimeNumber_FullMethodName   = "/protos.CaculatorService/ToPrimeNumber"
+	CaculatorService_Average_FullMethodName         = "/protos.CaculatorService/Average"
+	CaculatorService_FindMax_FullMethodName         = "/protos.CaculatorService/FindMax"
+	CaculatorService_Square_FullMethodName          = "/protos.CaculatorService/Square"
 )
 
 // CaculatorServiceClient is the client API for CaculatorService service.
@@ -33,6 +34,7 @@ const (
 type CaculatorServiceClient interface {
 	Hello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloResponse, error)
 	Sum(ctx context.Context, in *SumRequest, opts ...grpc.CallOption) (*SumResponse, error)
+	SumWithDeadline(ctx context.Context, in *SumRequest, opts ...grpc.CallOption) (*SumResponse, error)
 	ToPrimeNumber(ctx context.Context, in *ToPrimeNumberRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ToPrimeNumberResponse], error)
 	Average(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[AverageRequest, AverageResponse], error)
 	FindMax(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[FindMaxRequest, FindMaxResponse], error)
@@ -61,6 +63,16 @@ func (c *caculatorServiceClient) Sum(ctx context.Context, in *SumRequest, opts .
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SumResponse)
 	err := c.cc.Invoke(ctx, CaculatorService_Sum_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *caculatorServiceClient) SumWithDeadline(ctx context.Context, in *SumRequest, opts ...grpc.CallOption) (*SumResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SumResponse)
+	err := c.cc.Invoke(ctx, CaculatorService_SumWithDeadline_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -128,6 +140,7 @@ func (c *caculatorServiceClient) Square(ctx context.Context, in *SquareRequest, 
 type CaculatorServiceServer interface {
 	Hello(context.Context, *HelloRequest) (*HelloResponse, error)
 	Sum(context.Context, *SumRequest) (*SumResponse, error)
+	SumWithDeadline(context.Context, *SumRequest) (*SumResponse, error)
 	ToPrimeNumber(*ToPrimeNumberRequest, grpc.ServerStreamingServer[ToPrimeNumberResponse]) error
 	Average(grpc.ClientStreamingServer[AverageRequest, AverageResponse]) error
 	FindMax(grpc.BidiStreamingServer[FindMaxRequest, FindMaxResponse]) error
@@ -146,6 +159,9 @@ func (UnimplementedCaculatorServiceServer) Hello(context.Context, *HelloRequest)
 }
 func (UnimplementedCaculatorServiceServer) Sum(context.Context, *SumRequest) (*SumResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Sum not implemented")
+}
+func (UnimplementedCaculatorServiceServer) SumWithDeadline(context.Context, *SumRequest) (*SumResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SumWithDeadline not implemented")
 }
 func (UnimplementedCaculatorServiceServer) ToPrimeNumber(*ToPrimeNumberRequest, grpc.ServerStreamingServer[ToPrimeNumberResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method ToPrimeNumber not implemented")
@@ -215,6 +231,24 @@ func _CaculatorService_Sum_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CaculatorService_SumWithDeadline_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SumRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CaculatorServiceServer).SumWithDeadline(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CaculatorService_SumWithDeadline_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CaculatorServiceServer).SumWithDeadline(ctx, req.(*SumRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CaculatorService_ToPrimeNumber_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(ToPrimeNumberRequest)
 	if err := stream.RecvMsg(m); err != nil {
@@ -272,6 +306,10 @@ var CaculatorService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Sum",
 			Handler:    _CaculatorService_Sum_Handler,
+		},
+		{
+			MethodName: "SumWithDeadline",
+			Handler:    _CaculatorService_SumWithDeadline_Handler,
 		},
 		{
 			MethodName: "Square",
